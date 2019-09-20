@@ -1,0 +1,15 @@
+(clase) evento de futbol - equipo local/visitante
+cada evento tiene -------- 3 tipos de mercado : over/under 1.5
+2.5 y 3.5 goles.
+
+(clase) tipo de mercado - info cuota over/under / 
+dinero over /
+dinero under
+
+(clase) usuarios - nombre, apellidos, email, edad 
+info de cuenta vinculada: saldo actual, nombre banco 
+tarjeta vinculada
+
+se almacena info de cada apuesta por usuario:
+indicando: tipo mercado, tipo de apuesta, cuota y dinero apostado
+
