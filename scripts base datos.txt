@@ -1,0 +1,55 @@
+CREATE DATABASE IF NOT EXISTS CasaApuestas;
+USE CasaApuestas;
+
+
+CREATE TABLE Eventos (
+
+idEvento INT NOT NULL PRIMARY KEY,
+Equipolocal VARCHAR(45),
+Equipovisitante VARCHAR(45)
+
+);
+
+
+CREATE TABLE Usuario (
+
+idUsuario INT NOT NULL PRIMARY KEY,
+Nombre VARCHAR(45),
+Apellidos VARCHAR(45),
+Email VARCHAR(45),
+Edad VARCHAR(45)
+
+);
+
+CREATE TABLE Mercado (
+id INT NOT NULL PRIMARY KEY,
+infocuotaOver DOUBLE,
+infocuotaUnder DOUBLE,
+dineroapostadoOver DOUBLE,
+dineroapostadoUnder DOUBLE,
+tipoMercado DOUBLE,
+idEvento INT,
+CONSTRAINT Eventos_Mercado FOREIGN KEY (idEvento) REFERENCES Eventos(idEvento));
+
+
+CREATE TABLE Apuestas (
+
+idMercado INT NOT NULL PRIMARY KEY,
+tipoApuesta BOOL,
+cuota DOUBLE,
+DineroApostado DOUBLE,
+id INT,
+idUsuario INT,
+CONSTRAINT Mercado_Apuestas FOREIGN KEY (id) REFERENCES Mercado (id),
+CONSTRAINT Id_Usuario FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario));
+
+
+CREATE TABLE Cbancaria (
+
+NumTarjeta INT NOT NULL PRIMARY KEY,
+saldo DOUBLE,
+Nombrebanco VARCHAR(45),
+idUsuario INT,
+CONSTRAINT Cuenta_usuario FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario));
+
+
