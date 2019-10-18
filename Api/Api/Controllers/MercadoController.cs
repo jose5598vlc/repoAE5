@@ -11,17 +11,21 @@ namespace Api.Controllers
     public class MercadoController : ApiController
     {
         // GET: api/Mercado
-        public IEnumerable<string> Get()
+        public IEnumerable<MercadoDTO> Get()
         {
-            return new string[] { "value1", "value2" };
+            var repo = new MercadoRepository();
+            List<MercadoDTO> mercad = repo.RetrieveDTO();
+            return mercad;
         }
 
         // GET: api/Mercado/5
         public Mercado Get(int id)
         {
+            /*
             var merca = new MercadoRepository();
             Mercado merca1 = merca.Retrieve();
-            return merca1;
+            */
+            return null;
         }
 
         // POST: api/Mercado

@@ -20,4 +20,18 @@ namespace Api.Models
         public string EquipoVisitante { get; set; }
 
     }
+
+    public class EventosDTO
+    {
+        public EventosDTO(string EquipoLocal, string EquipoVisitante)
+        {
+            Elocal = EquipoLocal;
+            EVisitante = EquipoVisitante;
+        }
+
+        public string Elocal { get; set; }
+
+        public string EVisitante { get; set; }
+
+    }
 }

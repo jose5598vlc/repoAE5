@@ -16,7 +16,7 @@ namespace Api.Models
             return cone;
         }
 
-        internal Eventos Retrieve()
+        internal List<EventosDTO> RetrieveDTO()
         {
             /*
             Eventos evento1 = new Eventos(1, "Barcelona", "RealMadrid");
@@ -30,14 +30,17 @@ namespace Api.Models
             con.Open();
             MySqlDataReader res = command.ExecuteReader();
 
-            Eventos evento = null;
-            if (res.Read())
-                {
+            EventosDTO evento = null;
+            List<EventosDTO> eventos = new List<EventosDTO>();
+            while (res.Read())
+            {
                 Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetString(1) + " " + res.GetString(2));
-                evento = new Eventos(res.GetInt16(0), res.GetString(1), res.GetString(2));
+                evento = new EventosDTO(res.GetString(1), res.GetString(2));
+                eventos.Add(evento);
             }
             con.Close();
-            return evento;
-            }
+            return eventos;
         }
     }
+
+}

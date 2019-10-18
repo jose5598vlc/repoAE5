@@ -11,23 +11,30 @@ namespace Api.Controllers
     public class EventosController : ApiController
     {
         // GET: api/Eventos
-        public IEnumerable<string> Get()
+        public IEnumerable<EventosDTO> Get()
         {
-            return new string[] { "value1", "value2" };
+            var repo = new EventosRepository();
+            List<EventosDTO> eventos = repo.RetrieveDTO();
+            return eventos;
         }
 
         // GET: api/Eventos/5
         public Eventos Get(int id)
         {
+            /*
             var repo = new EventosRepository();
             Eventos evento1 =  repo.Retrieve();
-            return evento1;
+            */
+            return null;
 
         }
 
         // POST: api/Eventos
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Eventos evento)
         {
+          
+         
+
         }
 
         // PUT: api/Eventos/5
