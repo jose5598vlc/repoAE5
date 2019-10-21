@@ -49,6 +49,8 @@ namespace Api.Models
 
         internal void Save(Apuestas apuestas)
         {
+
+            //HACEMOS LA AUESTA
             MySqlConnection con = Connect();
             MySqlCommand comand = con.CreateCommand();
             comand.CommandText = "insert * into apuestas (tipoApuesta, cuota, DineroApostado, id, idUsuario) values (' " + apuestas.tipoApuesta + " ' , ' " + apuestas.cuota + " ', ' " + apuestas.DineroApostado + " ', ' " + apuestas.id + " ', ' " + apuestas.idUsuario + " ') ";
@@ -65,23 +67,139 @@ namespace Api.Models
                 Debug.WriteLine("se ha producido un error de conexión");
             }
 
-            // calculos operaciones cuota dependiendo de probabilidad
 
-            MySqlCommand comandoDineroTotalOver = con.CreateCommand();
-            comandoDineroTotalOver.CommandText = "SELECT DineroApostadoOver, DineroApostadoUnder FROM mercado;";
+
+            // sacamos el dinero total del mercado (over o under) y sumarlo a nuestra apuesta anterior
+
+
+
+
+            MySqlCommand dineroApuesta = con.CreateCommand();
+            dineroApuesta.CommandText = "SELECT dineroapostadoOver, dineroapostadoUnder, DineroApostado FROM mercado, apuestas;";
+
+            double dineroOver = 0, dineroUnder = 0, Apostado = 0;
+
+            con.Open();
+            MySqlDataReader res2 = dineroApuesta.ExecuteReader();
+
+            while (res2.Read())
+            {
+                dineroOver = res2.GetDouble(0);
+                dineroUnder = res2.GetDouble(1);
+                Apostado = res2.GetDouble(2);
+            }
+
+            if (apuestas.tipoApuesta == false)
+            {
+                dineroOver += dineroOver;
+            } else
+            {
+                dineroUnder += dineroUnder;
+            }
+
+            con.Close();
+
+
+
+            //Actualizar con el dinero total del mercado en el mercado correspondiente.
+
+            if (apuestas.tipoApuesta == false)
+            {
+                MySqlCommand insertarApuesta = con.CreateCommand();
+                insertarApuesta.CommandText = "UPDATE mercado SET dineroapostadoOver = " + dineroOver + " WHERE id = " + apuestas.idMercado + " ";
+                Debug.WriteLine("comando " + comand.CommandText);
+
+                try
+                {
+                    con.Open();
+                    comand.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (MySqlException e)
+                {
+                    Debug.WriteLine("se ha producido error de conexion");
+                }
+
+            } else
+            {
+                MySqlCommand insertarApuestaUnder = con.CreateCommand();
+                insertarApuestaUnder.CommandText = "UPDATE mercado SET dineroapostadoUnder = " + dineroUnder + " WHERE id = " + apuestas.idMercado + " ";
+
+                try
+                {
+                    con.Open();
+                    comand.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (MySqlException e)
+                {
+                    Debug.WriteLine("se ha producido error de conexion");
+                }
+
+
+            }
+
+
+            
+            //Sacas el dinero total OVER y dinero total UNDER.
+
+            MySqlCommand comandoDineroTotal = con.CreateCommand();
+            comandoDineroTotal.CommandText = "SELECT DineroApostadoOver, DineroApostadoUnder FROM mercado;";
 
             double dineroTotalOver = 0, dineroTotalUnder = 0;
 
             con.Open();
-            MySqlDataReader res = comandoDineroTotalOver.ExecuteReader();
+            MySqlDataReader res = comandoDineroTotal.ExecuteReader();
 
             while (res.Read())
             {
-                dineroTotalOver = res.GetDouble(3);
-                dineroTotalUnder = res.GetDouble(4);
+                dineroTotalOver = res.GetDouble(0);
+                dineroTotalUnder = res.GetDouble(1);
             }
 
             con.Close();
+
+
+
+            //Con el dinero del SELECT de arriba, hacer los cálculos del PDF.
+            //Guardas en variable resultado de probabilidad
+
+            double probabilidadOver = dineroTotalOver / dineroTotalOver + dineroTotalUnder;
+
+            double probabilidadUnder = dineroTotalUnder / dineroTotalOver + dineroTotalUnder;
+
+
+            //Calculas en otra variable resultado de cuota nueva
+
+            double cuotaOver = 1 / probabilidadOver * 0.95;
+
+            double cuotaUnder = 1 / probabilidadUnder * 0.95;
+
+
+
+
+
+            //Actualizar cuota OVER y cuota UNDER
+
+            
+            
+                MySqlCommand actualizarCuota = con.CreateCommand();
+                actualizarCuota.CommandText = "UPDATE mercado SET infocuotaOver = " + cuotaOver +  ", infocuotaUnder = " + cuotaUnder + " WHERE id = " + apuestas.idMercado + " ";
+                Debug.WriteLine("comando " + comand.CommandText);
+
+                try
+                {
+                    con.Open();
+                    comand.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (MySqlException e)
+                {
+                    Debug.WriteLine("se ha producido error de conexion");
+                }
+
+            
+            
 
         }
 
