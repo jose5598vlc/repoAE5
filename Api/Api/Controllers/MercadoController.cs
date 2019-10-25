@@ -8,6 +8,7 @@ using System.Web.Http;
 
 namespace Api.Controllers
 {
+    [Authorize]
     public class MercadoController : ApiController
     {
         // GET: api/Mercado

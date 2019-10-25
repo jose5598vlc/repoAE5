@@ -8,6 +8,7 @@ using System.Web.Http;
 
 namespace Api.Controllers
 {
+    [Authorize]
     public class EventosController : ApiController
     {
         // GET: api/Eventos
@@ -17,6 +18,8 @@ namespace Api.Controllers
             List<EventosDTO> eventos = repo.RetrieveDTO();
             return eventos;
         }
+
+
 
         // GET: api/Eventos/5
         public Eventos Get(int id)

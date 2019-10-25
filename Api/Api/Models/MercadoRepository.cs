@@ -42,6 +42,12 @@ namespace Api.Models
             con.Close();
             return mercad;
         }
+
+
+
     }
 
+
+
 }
+ 

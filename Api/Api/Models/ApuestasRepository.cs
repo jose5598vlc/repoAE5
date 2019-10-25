@@ -50,7 +50,7 @@ namespace Api.Models
         internal void Save(Apuestas apuestas)
         {
 
-            //HACEMOS LA AUESTA
+            //HACEMOS LA APUESTA
             MySqlConnection con = Connect();
             MySqlCommand comand = con.CreateCommand();
             comand.CommandText = "insert * into apuestas (tipoApuesta, cuota, DineroApostado, id, idUsuario) values (' " + apuestas.tipoApuesta + " ' , ' " + apuestas.cuota + " ', ' " + apuestas.DineroApostado + " ', ' " + apuestas.id + " ', ' " + apuestas.idUsuario + " ') ";
@@ -72,12 +72,12 @@ namespace Api.Models
             // sacamos el dinero total del mercado (over o under) y sumarlo a nuestra apuesta anterior
 
 
-
+            // SELECT que saca el dinero total tanto de over y under 
 
             MySqlCommand dineroApuesta = con.CreateCommand();
             dineroApuesta.CommandText = "SELECT dineroapostadoOver, dineroapostadoUnder, DineroApostado FROM mercado, apuestas;";
 
-            double dineroOver = 0, dineroUnder = 0, Apostado = 0;
+            double dineroOver = 0, dineroUnder = 0, Apostado = 0; // VARIABLE A LA QUE GUARDAMOS dinero OVER, UNDER y apostado
 
             con.Open();
             MySqlDataReader res2 = dineroApuesta.ExecuteReader();
@@ -198,8 +198,16 @@ namespace Api.Models
                     Debug.WriteLine("se ha producido error de conexion");
                 }
 
-            
-            
+
+            // consulta donde tenemos que sacar varios datos de varias tablas
+
+            /*  SELECT M.idmercado, M.tipoMercado, A.tipo, A.cuota, A.dinero
+             *  from Apuesta A, Usuario U, Mercado M
+             *  where
+             *  A.id_mercado = M.id AND
+             *  A.id_usuario = U.id AND U.email = email
+             *  
+             *  */
 
         }
 

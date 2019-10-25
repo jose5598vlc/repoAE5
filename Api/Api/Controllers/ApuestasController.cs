@@ -8,8 +8,10 @@ using System.Web.Http;
 
 namespace Api.Controllers
 {
+  
     public class ApuestasController : ApiController
     {
+        [Authorize(Roles = "Admin")] // solo los usuarios con rol admin pueden tener acceso a la funcion que devuelve todas las apuestas de un mercado
         // GET: api/Apuestas
         public IEnumerable<ApuestasDTO> Get()
         {
@@ -29,6 +31,7 @@ namespace Api.Controllers
         }
 
         // POST: api/Apuestas
+        [Authorize(Roles = "Standard")] // solo los usuarios autenticados pueden apostar
         public void Post([FromBody] Apuestas apuestas)
         {
 
