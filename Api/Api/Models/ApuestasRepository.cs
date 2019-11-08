@@ -45,7 +45,70 @@ namespace Api.Models
             return apuest;
         }
 
-        
+        internal List<Apuestas> RetrieveByEmail(string Email)
+        {
+            MySqlConnection conec = Connect();
+            MySqlCommand command = conec.CreateCommand();
+            command.CommandText = "SELECT evento, tipoMercado, tipoApuesta, cuota, DineroApostado FROM Mercado M, Apuestas A WHERE M.id = A.id;";
+            command.Parameters.AddWithValue("A.id", Email);
+
+            try
+            {
+                conec.Open();
+                MySqlDataReader res = command.ExecuteReader();
+
+                Apuestas apuesta = null;
+                List<Apuestas> apuest = new List<Apuestas>();
+                while (res.Read())
+                {
+                    Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetDouble(1) + " " + res.GetDouble(2) + " " + res.GetBoolean(3) + " " + res.GetDouble(4));
+                    apuesta = new Apuestas(res.GetInt32(0), res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetInt32(4), res.GetInt32(5));
+                    apuest.Add(apuesta);
+                }
+
+                conec.Close();
+                return apuest;
+            } catch (MySqlException e)
+            {
+                Debug.WriteLine("Error de conexión");
+                return null;
+            }
+        }
+
+        internal List<Apuestas> RetrieveByMercado(int id)
+        {
+            MySqlConnection conect = Connect();
+            MySqlCommand command = conect.CreateCommand();
+            command.CommandText = "SELECT Email, tipoMercado, tipoApuesta, cuota, DineroApostado FROM Usuario U, Mercado M, Apuesta A WHERE M.id = A.id;";
+            command.Parameters.AddWithValue("A.id", id);
+
+            try
+            {
+                conect.Open();
+                MySqlDataReader res = command.ExecuteReader();
+
+                Apuestas apue = null;
+                List<Apuestas> apues = new List<Apuestas>();
+                while (res.Read())
+                {
+                    Debug.WriteLine("Recuperado: " + res.GetString(0) + " " + res.GetDouble(1) + " " + res.GetBoolean(2) + " " + res.GetDouble(3) + " " + res.GetDouble(4));
+                    apue = new Apuestas(res.GetInt32(0), res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetInt32(4), res.GetInt32(5));
+                    apues.Add(apue);
+                }
+
+                conect.Close();
+                return apues;
+
+            } catch (MySqlException e)
+            {
+                Debug.WriteLine("Error de conexión");
+                return null;
+            }
+        }
+
+
+
+
 
         internal void Save(Apuestas apuestas)
         {

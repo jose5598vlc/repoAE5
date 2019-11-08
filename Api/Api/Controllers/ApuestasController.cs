@@ -20,6 +20,19 @@ namespace Api.Controllers
             return apuest;
         }
 
+     public IEnumerable<Apuestas> GetEmail(string Email)
+        {
+            var repo = new ApuestasRepository();
+            List<Apuestas> apuest = repo.RetrieveByEmail(Email);
+            return apuest;
+        }
+
+        public IEnumerable<Apuestas> GetMercado (int id)
+        {
+            var repo = new ApuestasRepository();
+            List<Apuestas> apuest = repo.RetrieveByMercado(id);
+            return apuest;
+        }
         // GET: api/Apuestas/5
         public Apuestas Get(int id)
         {

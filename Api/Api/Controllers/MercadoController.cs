@@ -19,6 +19,14 @@ namespace Api.Controllers
             return mercad;
         }
 
+     public IEnumerable<Mercado> GetEvento(int idEvento)
+        {
+            var repo = new MercadoRepository();
+            List<Mercado> mercad = repo.RetrieveByEvento(idEvento);
+            return mercad;
+        }
+
+     
         // GET: api/Mercado/5
         public Mercado Get(int id)
         {

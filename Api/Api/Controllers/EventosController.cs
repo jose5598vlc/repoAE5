@@ -20,6 +20,9 @@ namespace Api.Controllers
         }
 
 
+       
+ 
+
 
         // GET: api/Eventos/5
         public Eventos Get(int id)
