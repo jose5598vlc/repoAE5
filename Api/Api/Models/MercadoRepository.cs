@@ -47,7 +47,7 @@ namespace Api.Models
         {
             MySqlConnection cone = Connect();
             MySqlCommand command = cone.CreateCommand();
-            command.CommandText = "SELECT tipoMercado, infocuotaOver, infocuotaUnder from mercado WHERE idEvento = idEvento;";
+            command.CommandText = "SELECT idEvento, tipoMercado, infocuotaOver, infocuotaUnder from mercado WHERE idEvento = idEvento;";
             command.Parameters.AddWithValue("idEvento", idEvento);
 
             try

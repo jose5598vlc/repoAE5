@@ -26,7 +26,7 @@ namespace Api.Models
             */
             MySqlConnection con = Connect();
             MySqlCommand comand = con.CreateCommand();
-            comand.CommandText = "select * from apuestas";
+            comand.CommandText = "select * from apuestas;";
 
             con.Open();
             MySqlDataReader res = comand.ExecuteReader();
@@ -49,8 +49,8 @@ namespace Api.Models
         {
             MySqlConnection conec = Connect();
             MySqlCommand command = conec.CreateCommand();
-            command.CommandText = "SELECT evento, tipoMercado, tipoApuesta, cuota, DineroApostado FROM Mercado M, Apuestas A WHERE M.id = A.id;";
-            command.Parameters.AddWithValue("A.id", Email);
+            command.CommandText = "SELECT Email, idEvento, tipoMercado, tipoApuesta, cuota, DineroApostado FROM Usuario U, Mercado M, Apuestas A WHERE U.Email = U.Email;";
+            command.Parameters.AddWithValue("U.Email", Email);
 
             try
             {
@@ -79,7 +79,7 @@ namespace Api.Models
         {
             MySqlConnection conect = Connect();
             MySqlCommand command = conect.CreateCommand();
-            command.CommandText = "SELECT Email, tipoMercado, tipoApuesta, cuota, DineroApostado FROM Usuario U, Mercado M, Apuesta A WHERE M.id = A.id;";
+            command.CommandText = "SELECT idMercado, tipoMercado, tipoApuesta, cuota, DineroApostado FROM Apuestas A, Mercado M WHERE M.id = A.id;";
             command.Parameters.AddWithValue("A.id", id);
 
             try
