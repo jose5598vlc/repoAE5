@@ -14,10 +14,10 @@ namespace Api.Controllers
         /*
         [Authorize(Roles = "Admin")] */// solo los usuarios con rol admin pueden tener acceso a la funcion que devuelve todas las apuestas de un mercado
         // GET: api/Apuestas
-        public IEnumerable<Apuestas> GetApuestas(int idUsuario)
+        public IEnumerable<ApuestasDTO> GetDTO(int id)
         {
             var repos = new ApuestasRepository();
-            List<Apuestas> apuest = repos.RetrieveByidUsuario(idUsuario);
+            List<ApuestasDTO> apuest = repos.RetrieveDTO(id);
             return apuest;
         }
 
@@ -35,14 +35,26 @@ namespace Api.Controllers
             return apuest;
         }
 
+
+        // ejercicio 1 examen
         public IEnumerable<Apuestas> GetTodasApuestas (int idUsuario)
         {
             var repo = new ApuestasRepository();
             List<Apuestas> apuest = repo.RetrieveByidUsuario(idUsuario);
             return apuest;
         }
+
+
+        // ejercicio 2 del examen
+        public IEnumerable<Apuestas> GetCuota (double cuota)
+        {
+            var repo = new ApuestasRepository();
+            List<Apuestas> apus = repo.RetrieveByCuota(cuota);
+            return apus;
+        }
+
         // GET: api/Apuestas/5
-        public Apuestas Get(int idUsuario)
+        public Apuestas Get(int id)
         {
             /*
             var apues = new ApuestasRepository();

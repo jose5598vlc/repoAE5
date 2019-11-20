@@ -9,7 +9,7 @@ namespace Api.Models
 {
     public class ApuestasRepository
     {
-        // modificacion de la conexion a URL donde se obtendra la información tal y como se muestra
+        
         private MySqlConnection Connect()
         {
             string connString = "Server=127.0.0.1;Port=3306;Database=casaapuestas;Uid=root;password='';sslMode=none";
@@ -18,17 +18,14 @@ namespace Api.Models
         }
 
 
-        // query todas las apuestas
-        internal List<ApuestasDTO> RetrieveDTO()
+        
+        internal List<ApuestasDTO> RetrieveDTO(int id)
         {
-            /*
-            Apuestas apuesta1 = new Apuestas(1000, true, 2.29, 2.50, 1, 1098);
-
-            return apuesta1;
-            */
+           
             MySqlConnection con = Connect();
             MySqlCommand comand = con.CreateCommand();
             comand.CommandText = "select * from apuestas;";
+            
 
             con.Open();
             MySqlDataReader res = comand.ExecuteReader();
@@ -37,7 +34,7 @@ namespace Api.Models
             List<ApuestasDTO> apuest = new List<ApuestasDTO>();
             while (res.Read())
             {
-                Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetBoolean(1) + " " + res.GetDouble(2) + " " + res.GetDouble(3), res.GetInt32(4), res.GetInt32(5));
+                Debug.WriteLine("Recuperado: " + res.GetBoolean(0) + " " + res.GetDouble(1) + " " + res.GetDouble(2) + " " + res.GetInt32(3) + " " + res.GetInt32(5));
                 apues = new ApuestasDTO(res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetInt32(4), res.GetInt32(5));
                 apuest.Add(apues);
 
@@ -133,6 +130,39 @@ namespace Api.Models
                 }
                 conecti.Close();
                 return apu;
+            } catch (MySqlException e)
+            {
+                Debug.WriteLine("Error de conexión");
+                return null;
+            }
+        }
+
+
+        // ejercicio 2 donde se pide todas las apuestas cuya cuota este entre un valor minimo y uno maximo
+        internal List<Apuestas> RetrieveByCuota(double cuota)
+        {
+            MySqlConnection conect = Connect();
+            MySqlCommand command = conect.CreateCommand();
+            command.CommandText = "SELECT Nombre, DineroApostado, tipoMercado, cuota FROM Usuario U, Apuestas A, Mercado M WHERE A.cuota>0 && A.cuota<3;";
+            command.Parameters.AddWithValue("A.cuota", cuota);
+
+
+            try
+            {
+                conect.Open();
+                MySqlDataReader re = command.ExecuteReader();
+
+                Apuestas a = null;
+                List<Apuestas> apus = new List<Apuestas>();
+
+                while (re.Read())
+                {
+                    Debug.WriteLine("Recuperado: " + re.GetString(0) + " " + re.GetDouble(1) + " " + re.GetDouble(2) + " " + re.GetDouble(3));
+                    new Apuestas(re.GetInt32(0), re.GetBoolean(1), re.GetDouble(2), re.GetDouble(3), re.GetInt32(4), re.GetInt32(5));
+                    apus.Add(a);
+                }
+                conect.Close();
+                return apus;
             } catch (MySqlException e)
             {
                 Debug.WriteLine("Error de conexión");
