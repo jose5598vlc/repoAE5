@@ -9,7 +9,7 @@ namespace Api.Models
 {
     public class ApuestasRepository
     {
-
+        // modificacion de la conexion a URL donde se obtendra la información tal y como se muestra
         private MySqlConnection Connect()
         {
             string connString = "Server=127.0.0.1;Port=3306;Database=casaapuestas;Uid=root;password='';sslMode=none";
@@ -17,6 +17,8 @@ namespace Api.Models
             return cone;
         }
 
+
+        // query todas las apuestas
         internal List<ApuestasDTO> RetrieveDTO()
         {
             /*
@@ -99,6 +101,38 @@ namespace Api.Models
                 conect.Close();
                 return apues;
 
+            } catch (MySqlException e)
+            {
+                Debug.WriteLine("Error de conexión");
+                return null;
+            }
+        }
+
+        // codigo del ejercicio 1 donde se pide que se devuelvan: Nombre_Usuario, Cantidad Apostada, Mercado y Cuota de la apuesta
+        internal List<Apuestas> RetrieveByidUsuario(int idUsuario)
+        {
+            MySqlConnection conecti = Connect();
+            MySqlCommand command = conecti.CreateCommand();
+            command.CommandText = "SELECT Nombre, DineroApostado, tipoMercado, cuota FROM Usuario U, Apuestas A, Mercado M WHERE A.id=U.idUsuario;";
+            command.Parameters.AddWithValue("U.idUsuario", idUsuario);
+
+
+            try
+            {
+                conecti.Open();
+                MySqlDataReader res = command.ExecuteReader();
+
+                Apuestas ap = null;
+                List<Apuestas> apu = new List<Apuestas>();
+
+                while (res.Read())
+                {
+                    Debug.WriteLine("Recuperado: " + res.GetString(0) + " " + res.GetDouble(1) + " " + res.GetDouble(2) + " " + res.GetDouble(3));
+                    ap = new Apuestas(res.GetInt32(0), res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetInt32(4), res.GetInt32(5));
+                    apu.Add(ap);
+                }
+                conecti.Close();
+                return apu;
             } catch (MySqlException e)
             {
                 Debug.WriteLine("Error de conexión");
