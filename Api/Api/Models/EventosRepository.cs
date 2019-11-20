@@ -34,12 +34,19 @@ namespace Api.Models
             List<EventosDTO> eventos = new List<EventosDTO>();
             while (res.Read())
             {
-                Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetString(1) + " " + res.GetString(2));
+                Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetString(1) + " " + res.GetString(2) + " " + res.GetDouble(3));
                 evento = new EventosDTO(res.GetString(1), res.GetString(2));
                 eventos.Add(evento);
             }
             con.Close();
             return eventos;
+        }
+        // ejercicio 3, una vez actualizada la bbdd con un ALTER TABLE en eventos DONDE añadimos un campo dinero = 100 fijo. // sin terminar
+        internal void Save(Eventos eventos)
+        {
+            MySqlConnection con = Connect();
+            MySqlCommand comand = con.CreateCommand();
+            comand.CommandText = "INSERT INTO eventos (idEvento, EquipoLocal, EquipoVisitante, dinero) VALUES (' " + eventos.idEvento + " ', ' " + eventos.EquipoLocal + " ', ' " + eventos.EquipoVisitante + " ' '  )";
         }
     }
 
